@@ -129,3 +129,7 @@ dmypy.json
 .pyre/
 .DS_Store
 .idea/
+drawings.graffle/data.plist
+drawings.graffle/image1.png
+drawings.graffle/image2.png
+drawings.graffle/image3.png
