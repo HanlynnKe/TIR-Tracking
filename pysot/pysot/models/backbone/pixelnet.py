@@ -71,11 +71,11 @@ class AttentionBlock(nn.Module):
 class ShallowAlexNet(nn.Module):
     def __init__(self):
         super(ShallowAlexNet, self).__init__()
-        alexnet = models.alexnet(pretrained=True)
+        alexnet = models.alexnet(pretrained=False)
         
         shallownet = alexnet.features[:8]
-        for param in shallownet.parameters():
-            param.requires_grad = False
+#         for param in shallownet.parameters():
+#             param.requires_grad = False
         
         self.Conv1 = shallownet[:2]
         self.MaxP1 = shallownet[2]
@@ -101,7 +101,7 @@ class ShallowAlexNet(nn.Module):
 class ShallowResNet(nn.Module):
     def __init__(self):
         super(ShallowResNet, self).__init__()
-        resnet50 = models.resnet50(pretrained=True)
+        resnet50 = models.resnet50(pretrained=False)
 
         # 这一部分直接使用原框架定义即可
 #         self.Layer1 = nn.Sequential(
@@ -122,10 +122,10 @@ class ShallowResNet(nn.Module):
 
 #         for param in self.Layer1.parameters():
 #             param.requires_grad = False
-        for param in self.Layer2.parameters():
-            param.requires_grad = False
-        for param in self.Layer3.parameters():
-            param.requires_grad = False
+#         for param in self.Layer2.parameters():
+#             param.requires_grad = False
+#         for param in self.Layer3.parameters():
+#             param.requires_grad = False
         
     def forward(self, x):
 #         x = self.Layer1(x)
