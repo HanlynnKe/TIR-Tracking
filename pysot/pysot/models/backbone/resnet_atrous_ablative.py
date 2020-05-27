@@ -3,7 +3,7 @@ import math
 import torch.nn as nn
 import torch
 
-from pysot.models.backbone.pixelnet-ablative import PixelNet1B, PixelNet2B, PixelNet3B, PixelNet4B
+from pysot.models.backbone.pixelnet_ablative import PixelNet1B, PixelNet2B, PixelNet3B, PixelNet4B
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50']
 
@@ -196,10 +196,11 @@ class ResNet(nn.Module):
         x_ = self.relu(x)
         x = self.maxpool(x_)
         
-        p1_ = self.pixelnet(x)
-        p1 = self.layer1(x)
+#         p1_ = self.pixelnet(x)
+#         p1 = self.layer1(x)
+#         p1 = p1 + p1_
 
-        p1 = p1 + p1_
+        p1 = self.pixelnet(x)
         p2 = self.layer2(p1)
         p3 = self.layer3(p2)
         p4 = self.layer4(p3)

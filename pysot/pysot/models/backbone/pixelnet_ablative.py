@@ -108,7 +108,7 @@ class ShallowResNet(nn.Module):
 class PixelNet1B(nn.Module):
     # ResNet50 embedded
     def __init__(self):
-        super(PixelNetRE, self).__init__()
+        super(PixelNet1B, self).__init__()
         
         self.shallow = ShallowResNet()
         
@@ -134,7 +134,7 @@ class PixelNet1B(nn.Module):
 class PixelNet2B(nn.Module):
     # ResNet50 embedded
     def __init__(self):
-        super(PixelNetRE, self).__init__()
+        super(PixelNet2B, self).__init__()
         
         self.shallow = ShallowResNet()
         
@@ -164,7 +164,7 @@ class PixelNet2B(nn.Module):
 class PixelNet3B(nn.Module):
     # ResNet50 embedded
     def __init__(self):
-        super(PixelNetRE, self).__init__()
+        super(PixelNet3B, self).__init__()
         
         self.shallow = ShallowResNet()
         
@@ -197,7 +197,7 @@ class PixelNet3B(nn.Module):
 class PixelNet4B(nn.Module):
     # ResNet50 embedded
     def __init__(self):
-        super(PixelNetRE, self).__init__()
+        super(PixelNet4B, self).__init__()
         
         self.shallow = ShallowResNet()
         
