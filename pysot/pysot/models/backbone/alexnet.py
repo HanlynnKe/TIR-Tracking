@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import torch.nn as nn
 
+# from pysot.models.backbone.pixelnet import PixelNetAE
 
 class AlexNetLegacy(nn.Module):
     configs = [3, 96, 256, 384, 384, 256]

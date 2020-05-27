@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import torch
 import torch.nn as nn
 
+# from pysot.models.backbone.pixelnet import PixelNetME
 
 def conv_bn(inp, oup, stride, padding=1):
     return nn.Sequential(

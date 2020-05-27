@@ -67,60 +67,11 @@ class AttentionBlock(nn.Module):
         return out
 
 
-# 由AlexNet组成浅卷积网络，只使用前三层卷积层
-class ShallowAlexNet(nn.Module):
-    def __init__(self):
-        super(ShallowAlexNet, self).__init__()
-        alexnet = models.alexnet(pretrained=False)
-        
-        shallownet = alexnet.features[:8]
-#         for param in shallownet.parameters():
-#             param.requires_grad = False
-        
-        self.Conv1 = shallownet[:2]
-        self.MaxP1 = shallownet[2]
-        self.MaxP1 = nn.MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
-        self.Conv2 = shallownet[3:5]
-        self.MaxP2 = shallownet[5]
-        self.MaxP2 = nn.MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
-        self.Conv3 = shallownet[6:]
-        
-    def forward(self, x):
-        x = self.Conv1(x)
-        x = self.MaxP1(x)
-        
-        x = self.Conv2(x)
-        x = self.MaxP2(x)
-        
-        x = self.Conv3(x)
-
-        return x
-    
-    
-# 由MobileNet组成浅卷积网络，只使用前三层卷积层
-class ShallowMobileNet(nn.Module):
-    def __init__(self):
-        super(ShallowAlexNet, self).__init__()
-        mobilenet = models.mobilenet_v2(pretrained=False)
-        
-        shallownet = mobilenet.features[:1]
-#         for param in shallownet.parameters():
-#             param.requires_grad = False
-        
-    def forward(self, x):
-        x = self.shallownet(x)
-        return x
-
-
-# 由ResNet组成浅卷积网络，只使用三层卷积层
+# 由预训练的ResNet50组成浅卷积网络，只使用三层卷积层
 class ShallowResNet(nn.Module):
     def __init__(self):
         super(ShallowResNet, self).__init__()
         resnet50 = models.resnet50(pretrained=False)
-        # ablative experiments ---->
-#         resnet34 = models.resnet34(pretrained=False)
-#         resnet18 = models.resnet18(pretrained=False)
-        # <---- ablative experiments
 
         # 这一部分直接使用原框架定义即可
 #         self.Layer1 = nn.Sequential(
@@ -153,79 +104,34 @@ class ShallowResNet(nn.Module):
 
         return x
 
-
-# PixelNet的具体实现参照Multi-Head Attention的结构
-class PixelNetAE(nn.Module):
-    # AlexNet embedded
+    
+class PixelNet1B(nn.Module):
+    # ResNet50 embedded
     def __init__(self):
-        super(PixelNetAE, self).__init__()
+        super(PixelNetRE, self).__init__()
         
-        self.shallow = ShallowAlexNet
+        self.shallow = ShallowResNet()
         
-        self.atblock_1 = AttentionBlock(in_channels=384)
-        
-        self.atblock_2 = AttentionBlock(in_channels=384)
+        self.atblock = AttentionBlock(in_channels=256)
         
         self.W = nn.Sequential(
-            nn.Conv2d(in_channels=768, out_channels=256, kernel_size=1, stride=1, padding=0),
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=1, stride=1, padding=0),
             nn.BatchNorm2d(256),
         )
         nn.init.constant_(self.W[1].weight, 0)
         nn.init.constant_(self.W[1].bias, 0)
         
-        self.V = nn.Conv2d(in_channels=384, out_channels=256, kernel_size=1, stride=1, padding=0),
-        
     def forward(self, t):
         t = self.shallow(t)
-        t_1 = self.atblock_1(t)
-        t_2 = self.atblock_2(t)
-        t_ = torch.cat((t_1, t_2), 1)
+        
+        t_1 = self.atblock(t)
         t_ = self.W(t_)
-        _t = self.V(t)
-        t = _t + t_
-        
-        return t
-
-    
-class PixelNetME(nn.Module):
-    # AlexNet embedded
-    def __init__(self):
-        super(PixelNetAE, self).__init__()
-        
-        self.shallow = ShallowMobileNet
-        
-        self.atblock_1 = AttentionBlock(in_channels=16)
-        
-        self.atblock_2 = AttentionBlock(in_channels=16)
-        
-        self.W = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=96, kernel_size=1, stride=1, bias=False),
-            nn.BatchNorm2d(96),
-        )
-        nn.init.constant_(self.W[1].weight, 0)
-        nn.init.constant_(self.W[1].bias, 0)
-        
-        self.V = Sequential(
-            Conv2d(in_channels=96, out_channels=24, kernel_size=1, stride=1, bias=False),
-            BatchNorm2d(24),
-        )
-        nn.init.constant_(self.W[1].weight, 0)
-        nn.init.constant_(self.W[1].bias, 0)
-        
-        
-    def forward(self, t):
-        t = self.shallow(t)
-        t_1 = self.atblock_1(t)
-        t_2 = self.atblock_2(t)
-        t_ = torch.cat((t_1, t_2), 1)
-        t_ = self.W(t_)
-        _t = self.V(t)
-        t = _t + t_
+        t = t_ + t
         
         return t
     
 
-class PixelNetRE(nn.Module):
+class PixelNet2B(nn.Module):
     # ResNet50 embedded
     def __init__(self):
         super(PixelNetRE, self).__init__()
@@ -249,6 +155,77 @@ class PixelNetRE(nn.Module):
         t_1 = self.atblock_1(t)
         t_2 = self.atblock_2(t)
         t_ = torch.cat((t_1, t_2), 1)
+        t_ = self.W(t_)
+        t = t_ + t
+        
+        return t
+    
+    
+class PixelNet3B(nn.Module):
+    # ResNet50 embedded
+    def __init__(self):
+        super(PixelNetRE, self).__init__()
+        
+        self.shallow = ShallowResNet()
+        
+        self.atblock_1 = AttentionBlock(in_channels=256)
+        
+        self.atblock_2 = AttentionBlock(in_channels=256)
+        
+        self.atblock_3 = AttentionBlock(in_channels=256)
+        
+        self.W = nn.Sequential(
+            nn.Conv2d(in_channels=768, out_channels=256, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(256),
+        )
+        nn.init.constant_(self.W[1].weight, 0)
+        nn.init.constant_(self.W[1].bias, 0)
+        
+    def forward(self, t):
+        t = self.shallow(t)
+        
+        t_1 = self.atblock_1(t)
+        t_2 = self.atblock_2(t)
+        t_3 = self.atblock_3(t)
+        t_ = torch.cat((torch.cat((t_1, t_2), 1), t_3), 1)
+        t_ = self.W(t_)
+        t = t_ + t
+        
+        return t
+    
+    
+class PixelNet4B(nn.Module):
+    # ResNet50 embedded
+    def __init__(self):
+        super(PixelNetRE, self).__init__()
+        
+        self.shallow = ShallowResNet()
+        
+        self.atblock_1 = AttentionBlock(in_channels=256)
+        
+        self.atblock_2 = AttentionBlock(in_channels=256)
+        
+        self.atblock_3 = AttentionBlock(in_channels=256)
+        
+        self.atblock_4 = AttentionBlock(in_channels=256)
+        
+        self.W = nn.Sequential(
+            nn.Conv2d(in_channels=1024, out_channels=256, kernel_size=1, stride=1, padding=0),
+            nn.BatchNorm2d(256),
+        )
+        nn.init.constant_(self.W[1].weight, 0)
+        nn.init.constant_(self.W[1].bias, 0)
+        
+    def forward(self, t):
+        t = self.shallow(t)
+        
+        t_1 = self.atblock_1(t)
+        t_2 = self.atblock_2(t)
+        t_3 = self.atblock_3(t)
+        t_4 = self.atblock_4(t)
+        t1_ = torch.cat((t_1, t_2), 1)
+        t2_ = torch.cat((t_3, t_4), 1)
+        t_ = torch.cat((t1_, t2_), 1)
         t_ = self.W(t_)
         t = t_ + t
         

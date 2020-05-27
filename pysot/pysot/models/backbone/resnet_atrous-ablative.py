@@ -3,7 +3,7 @@ import math
 import torch.nn as nn
 import torch
 
-from pysot.models.backbone.pixelnet import PixelNetRE
+from pysot.models.backbone.pixelnet-ablative import PixelNet1B, PixelNet2B, PixelNet3B, PixelNet4B
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50']
 
@@ -141,8 +141,10 @@ class ResNet(nn.Module):
             self.feature_size = 512 * block.expansion
         else:
             self.layer4 = lambda x: x  # identity
-            
-        self.pixelnet = PixelNetRE()
+        
+# ablative experiments ---->
+        self.pixelnet = PixelNet1B()
+# <---- ablative experiments
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
