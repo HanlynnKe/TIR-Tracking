@@ -8,7 +8,9 @@ I combine three Global Context Block with Multi-Head Attention framework and int
 
 But unfortunately when I got this pleasing model, I have done my graduation design and got my Bachelor degree 🙃
 
-**PixelNet embedded** SiamRPN++ tracker using ResNet-50 as backbone
+模型结构如下：
+
+![Nd48eO.png](https://s1.ax1x.com/2020/06/24/Nd48eO.png)
 
 主要使用框架：[PySOT](https://github.com/STVIR/pysot)中的SiamRPN++追踪器
 
