@@ -3,6 +3,13 @@
 
 **PixelNet embedded** SiamRPN++ tracker using ResNet-50 as backbone
 
+In this project, the famous Multi-Head Attention framework is used to build my fine-grained feature extraction network.
+I combine three Global Context Block with Multi-Head Attention framework and integrate it into SiamRPN++ tracker. The result is satisfying.
+
+But unfortunately when I got this pleasing model, I have done my graduation design and got my Bachelor degree 🙃
+
+**PixelNet embedded** SiamRPN++ tracker using ResNet-50 as backbone
+
 主要使用框架：[PySOT](https://github.com/STVIR/pysot)中的SiamRPN++追踪器
 
 课题中增加的代码有：
@@ -24,34 +31,34 @@
    
  - PixelNet两种嵌入方式的比较
  
-      Model   | Accuracy | Robustness | Loss |  EAO  |  FPS
-   -----------|----------|------------|------|-------|-------
-   PixelNet-a |  0.413   |    0.362   |  95  | 0.247 |  53.6
-   PixelNet-b |  0.408   |    0.331   |  87  | 0.260 |  62.4
+      Model      | Accuracy | Robustness | Loss |   EAO   |  FPS
+   --------------|----------|------------|------|---------|-------
+   PixelNet-2b-a |**0.413** |    0.362   |  95  |  0.247  |  53.6
+   PixelNet-2b-b |  0.408   |  **0.331** |**87**|**0.260**|  62.4
    
- - PixelNet（PixelNet-b）与原模型的比较
+ - PixelNet（PixelNet-3b）与原模型的比较
  
-     Model  | Accuracy | Robustness | Loss |  EAO  |  FPS
-   ---------|----------|------------|------|-------|-------
-   PixelNet |  0.408   |    0.331   |  87  | 0.260 |  62.4
-   Original |  0.428   |    0.350   |  92  | 0.264 |  69.3
+     Model  | Accuracy | Robustness | Loss |   EAO   |  FPS
+   ---------|----------|------------|------|---------|-------
+   PixelNet |  0.419   |  **0.305** |**80**|**0.275**|  67.9
+   Original |**0.428** |    0.350   |  92  |  0.264  |  69.3
    
  - PixelNet中AttentionBlock的个数的比较
    - 10个epoch时
    
-        AttnBlk No. | Accuracy | Robustness | Loss |  EAO  |  FPS
-        ------------|----------|------------|------|-------|-------
-        PixelNet-1b |  0.378   |    0.312   |  82  | 0.245 |  72.5
-        PixelNet-2b |  0.363   |    0.354   |  93  | 0.225 |  70.3
-        PixelNet-3b |  0.369   |    0.312   |  82  | 0.240 |  68.4
-        PixelNet-4b |  0.357   |    0.343   |  90  | 0.220 |  66.4
+        AttnBlk No. | Accuracy | Robustness | Loss |   EAO   |  FPS
+        ------------|----------|------------|------|---------|-------
+        PixelNet-1b |**0.378** |  **0.312** |**82**|**0.245**|  72.5
+        PixelNet-2b |  0.363   |    0.354   |  93  |  0.225  |  70.3
+        PixelNet-3b |  0.369   |  **0.312** |  82  |  0.240  |  68.4
+        PixelNet-4b |  0.357   |    0.343   |  90  |  0.220  |  66.4
      
    - 19个epoch时
    
-        AttnBlk No. | Accuracy | Robustness | Loss |  EAO  |  FPS
-        ------------|----------|------------|------|-------|-------
-        PixelNet-1b |  0.418   |    0.339   |  89  | 0.259 |  72.2
-        PixelNet-2b |  0.408   |    0.331   |  87  | 0.260 |  62.4
-        PixelNet-3b |  0.419   |    0.305   |  80  | 0.275 |  67.9
-        PixelNet-4b |  0.399   |    0.350   |  92  | 0.240 |  64.4
+        AttnBlk No. | Accuracy | Robustness | Loss |   EAO   |  FPS
+        ------------|----------|------------|------|---------|-------
+        PixelNet-1b |  0.418   |    0.339   |  89  |  0.259  |  72.2
+        PixelNet-2b |  0.408   |    0.331   |  87  |  0.260  |  62.4
+        PixelNet-3b |**0.419** |  **0.305** |**80**|**0.275**|  67.9
+        PixelNet-4b |  0.399   |    0.350   |  92  |  0.240  |  64.4
  
