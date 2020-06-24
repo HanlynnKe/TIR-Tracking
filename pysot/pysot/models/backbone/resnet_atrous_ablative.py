@@ -143,7 +143,7 @@ class ResNet(nn.Module):
             self.layer4 = lambda x: x  # identity
         
 # ablative experiments ---->
-        self.pixelnet = PixelNet1B()
+        self.pixelnet = PixelNet3B()
 # <---- ablative experiments
 
         for m in self.modules():
@@ -188,9 +188,7 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        
-        
-        
+                
         x = self.conv1(x)
         x = self.bn1(x)
         x_ = self.relu(x)
