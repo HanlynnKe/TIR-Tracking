@@ -50,7 +50,7 @@ But unfortunately when I got this pleasing model, I have done my graduation desi
         ------------|----------|------------|------|---------|-------
         PixelNet-1b |**0.378** |  **0.312** |**82**|**0.245**|  72.5
         PixelNet-2b |  0.363   |    0.354   |  93  |  0.225  |  70.3
-        PixelNet-3b |  0.369   |  **0.312** |  82  |  0.240  |  68.4
+        PixelNet-3b |  0.369   |  **0.312** |**82**|  0.240  |  68.4
         PixelNet-4b |  0.357   |    0.343   |  90  |  0.220  |  66.4
      
    - 19个epoch时
